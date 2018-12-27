@@ -3,11 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "bootstrap": "^4.2.1",
-    "react": "^16.7.0",
-    "react-dom": "^16.7.0",
-    "react-scripts": "2.1.2",
-    "reactstrap": "^6.5.0"
+    "async": "^2.5.0",
+    "body-parser": "^1.17.2",
+    "cookie-parser": "^1.4.3",
+    "dotenv": "^4.0.0",
+    "ejs": "^2.5.7",
+    "exceljs": "^0.7.1",
+    "express": "^4.16.0",
+    "express-session": "^1.15.6",
+    "helmet": "^3.8.2",
+    "moment": "^2.18.1",
+    "mysql": "^2.14.1",
+    "nodemailer": "^4.4.0",
+    "tempy": "^0.2.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -23,5 +31,10 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
+  "main": "index.js",
+  "devDependencies": {},
+  "author": "luis",
+  "license": "ISC"
 }
