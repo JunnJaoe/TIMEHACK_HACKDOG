@@ -133,7 +133,7 @@ FormController.prototype.deleteForm = function(cb, result) {
 		date_deleted: date
 	};
 
-  let query = `UPDATE forms SET ? WHERE id="` + this.req.body.formId + `" AND employee_id="` + this.req.body.employeeId + `" AND is_deleted=0`;
+  let query = `UPDATE forms SET ? WHERE id="` + this.req.body.formId + `" AND employee_id="` + this.req.body.employeeId + `" AND is_deleted=0 AND status=0`;
 	let deleteForm = TimeHackMySQL.execute(query, data);
 	deleteForm.then((form)=>{
 		if(form.changedRows > 0) {
@@ -163,7 +163,7 @@ FormController.prototype.cancelForm = function(cb, result) {
 		reason_for_cancel: this.req.body.reason
 	};
 
-  let query = `UPDATE forms SET ? WHERE id="` + this.req.body.formId + `" AND employee_id="` + this.req.body.employeeId + `" AND is_cancelled=0`;
+  let query = `UPDATE forms SET ? WHERE id="` + this.req.body.formId + `" AND employee_id="` + this.req.body.employeeId + `" AND is_cancelled=0 AND status=1`;
 	let cancelForm = TimeHackMySQL.execute(query, data);
 	cancelForm.then((form)=>{
 		if(form.changedRows > 0) {
@@ -192,7 +192,7 @@ FormController.prototype.approveForm = function(cb, result) {
 		date_approved: date
 	};
 
-  let query = `UPDATE forms SET ? WHERE id="` + this.req.body.formId + `" AND status!=0`;
+  let query = `UPDATE forms SET ? WHERE id="` + this.req.body.formId + `" AND status=0`;
 	let approveForm = TimeHackMySQL.execute(query, data);
 	approveForm.then((form)=>{
 		if(form.changedRows > 0) {
