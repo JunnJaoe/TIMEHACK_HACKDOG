@@ -32,4 +32,32 @@ router.post('/', function(req, res, next) {
 	});
 });
 
+router.get('/:employee_id/approver', function(req, res, next) {
+	var ACTION = '[getEmployeeApprover]';
+	Logger.log('debug', TAG + ACTION + ' request query', req.query);
+
+	var _employee = new EmployeeController(req);
+	async.auto({
+		getApprover:		_employee.getApprover.bind(_employee),
+	}, function(err, result) {
+		if (err) return res.error(err);
+		else return res.ok(result.getApprover);          
+	});
+});
+
+router.post('/:employee_id/approver', function(req, res, next) {
+	var ACTION = '[getEmployeeApprover]';
+	Logger.log('debug', TAG + ACTION + ' request query', req.query);
+
+	var _employee = new EmployeeController(req);
+	async.auto({
+		getApprover:			_employee.getApprover.bind(_employee),
+		checkApproverId:	['getApprover', _employee.checkApproverId.bind(_employee)],
+		addApprover:			['checkApproverId', _employee.addApprover.bind(_employee)],
+	}, function(err, result) {
+		if (err) return res.error(err);
+		else return res.ok(result.addApprover);          
+	});
+});
+
 module.exports = router;

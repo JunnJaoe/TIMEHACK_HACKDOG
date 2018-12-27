@@ -49,7 +49,6 @@ module.exports = {
   },
   raise: function (e) {
     var error = JSON.parse(JSON.stringify(this.get(e)));
-    error.error.details = {source: 'timehack-back'};
     return error;
   },
   getParam: function (tag) {
