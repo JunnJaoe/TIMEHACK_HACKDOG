@@ -2,7 +2,8 @@
 
 const TAG     = '[FormController]';
 const crypto  = require('crypto');
-const moment = require('moment');
+const moment 	= require('moment');
+const async   = require('async');
 const uuidv4 	= require('uuid/v4');
 const Logger  = require('../../services/Logger');
 const Errors  = require('../../services/Errors');
@@ -16,23 +17,80 @@ function FormController(req, res) {
 FormController.prototype.viewForms = function(cb, result) {
 	let ACTION = '[viewForms]';
 
-  let query = `SELECT * FROM forms WHERE employee_id = ?`;
-	let viewForms = TimeHackMySQL.execute(query, [this.req.body.employeeId]);
-	viewForms.then((forms)=>{
-		if(forms.length > 0) {
-			return cb(null, {
-				forms: forms
-			});
-		} else {
-			return cb(null, {
-	      message: "No forms filed yet"
-			});
-		}
-	}).catch((error)=>{
-		Logger.log('error', TAG + ACTION, error);
-    console.log(error);
-		return cb(Errors.raise('INTERNAL_SERVER_ERROR', error));
-  });
+	let employeeId = this.req.body.employeeId;
+
+	async.auto({
+		getApproved: function(callback) {
+			let query = `SELECT form_type, start_date, end_date, total_days, credit, details, date_approved, date_filed FROM forms WHERE employee_id = ? AND status=1 AND is_cancelled=0`;
+			let getApproved = TimeHackMySQL.execute(query, employeeId);
+			getApproved.then((forms)=>{
+				if(forms.length > 0) {
+					callback(null, forms);
+				} else {
+					callback(null, {
+			      message: "No approved forms yet."
+					});
+				}
+			}).catch((error)=>{
+				Logger.log('error', TAG + ACTION, error);
+		    console.log(error);
+				return cb(Errors.raise('INTERNAL_SERVER_ERROR', error));
+		  });
+    },
+    getCancelled: ['getApproved', function(res, callback) {
+      let query = `SELECT form_type, start_date, end_date, total_days, credit, details, date_approved, reason_for_cancel, date_cancelled, date_filed FROM forms WHERE employee_id = ? AND status=1 AND is_cancelled!=0`;
+			let getCancelled = TimeHackMySQL.execute(query, employeeId);
+			getCancelled.then((forms)=>{
+				if(forms.length > 0) {
+					callback(null, forms);
+				} else {
+					callback(null, {
+			      message: "No cancelled forms yet."
+					});
+				}
+			}).catch((error)=>{
+				Logger.log('error', TAG + ACTION, error);
+		    console.log(error);
+				return cb(Errors.raise('INTERNAL_SERVER_ERROR', error));
+		  });
+    }],
+		getPending: ['getCancelled', function(res, callback) {
+      let query = `SELECT form_type, start_date, end_date, total_days, credit, details, date_filed FROM forms WHERE employee_id = ? AND status=0 AND is_deleted=0`;
+			let getPending = TimeHackMySQL.execute(query, employeeId);
+			getPending.then((forms)=>{
+				if(forms.length > 0) {
+					callback(null, forms);
+				} else {
+					callback(null, {
+			      message: "No pending forms yet."
+					});
+				}
+			}).catch((error)=>{
+				Logger.log('error', TAG + ACTION, error);
+		    console.log(error);
+				return cb(Errors.raise('INTERNAL_SERVER_ERROR', error));
+		  });
+    }],
+		getDisapproved: ['getPending', function(res, callback) {
+      let query = `SELECT form_type, start_date, end_date, total_days, credit, details, date_filed FROM forms WHERE employee_id = ? AND status=-1 AND is_deleted=0`;
+			let getDisapproved = TimeHackMySQL.execute(query, employeeId);
+			getDisapproved.then((forms)=>{
+				if(forms.length > 0) {
+					callback(null, forms);
+				} else {
+					callback(null, {
+			      message: "No disapproved forms yet."
+					});
+				}
+			}).catch((error)=>{
+				Logger.log('error', TAG + ACTION, error);
+		    console.log(error);
+				return cb(Errors.raise('INTERNAL_SERVER_ERROR', error));
+		  });
+    }]
+	}, function(err, results) {
+		cb(null, results);
+	});
 };
 
 FormController.prototype.addForm = function(cb, result) {
