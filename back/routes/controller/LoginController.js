@@ -17,12 +17,11 @@ LoginController.prototype.submitLogin = function(cb, result) {
 
 	let encryptedPassword = crypto.createHmac('sha256', process.env.HMAC_KEY).update(this.req.body.password).digest('hex');
 
-	let query = `SELECT firstName, lastName, emailAddress, position FROM employee WHERE emailAddress = "` + this.req.body.email + `" AND password="` + encryptedPassword + `" AND user_role LIKE"%` + this.req.body.role + `%"`;
+	let query = `SELECT id, firstName, lastName, emailAddress, position, user_role FROM employee WHERE emailAddress = "` + this.req.body.email + `" AND password="` + encryptedPassword + `"`;
 	let getEmployee = TimeHackMySQL.execute(query);
 	getEmployee.then((employees)=>{
 		if(employees.length > 0) {
 			let employee = employees[0];
-			employee.role = this.req.body.role;
 
 			return cb(null, {
         message: "Successfully validated.",

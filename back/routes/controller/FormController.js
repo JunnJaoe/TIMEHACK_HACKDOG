@@ -182,33 +182,4 @@ FormController.prototype.cancelForm = function(cb, result) {
   });
 };
 
-FormController.prototype.approveForm = function(cb, result) {
-	let ACTION = '[approveForm]';
-
-	let date = '"' + moment().format('YYYY-MM-DD HH:MM:SS')  + '"';
-
-	let data = {
-		status: 1,
-		date_approved: date
-	};
-
-  let query = `UPDATE forms SET ? WHERE id="` + this.req.body.formId + `" AND status=0`;
-	let approveForm = TimeHackMySQL.execute(query, data);
-	approveForm.then((form)=>{
-		if(form.changedRows > 0) {
-			return cb(null, {
-				message: "Successfully approved form."
-			});
-		} else {
-			return cb(null, {
-				message: "Form already approved/does not exist."
-			});
-		}
-	}).catch((error)=>{
-		Logger.log('error', TAG + ACTION, error);
-    console.log(error);
-		return cb(Errors.raise('INTERNAL_SERVER_ERROR', error));
-  });
-};
-
 module.exports = FormController;

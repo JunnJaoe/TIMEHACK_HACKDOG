@@ -9,8 +9,9 @@ var express_configuration = require("./express-configuration");
 express_configuration.init(app, express);
 
 app.use('/v1/', require('./routes/login'));
-app.use('/v1/employees', require('./routes/employee'));
-app.use('/v1/forms', require('./routes/form'));
+app.use('/v1/employee', require('./routes/employee'));
+app.use('/v1/admin', require('./routes/admin'));
+app.use('/v1/approver', require('./routes/approver'));
 
 Logger.log('info', '[TimeHackMySQLDB] Connecting to database');
 let mysqlConnect = TimeHackMySQL.connect();
