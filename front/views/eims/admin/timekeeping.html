@@ -1,0 +1,223 @@
+<div class="row">
+    <div class="col-md-3">
+        <div class="box box-solid">
+            <div class="box-header with-border">
+                <h4 class="box-title">Filter Options</h4>
+            </div>
+            <div class="box-body">
+                <div class="form-group">
+                    <label for="select-type">Form Type:</label>
+                    <select class="form-control" id="select-form">
+                        <option value="0">All</option>
+                        <% for(var i = 0; i < index.form.length; i++) { %>
+                            <% if(index.form[i].parent_id == null) { %>
+                                <option value="<%= index.form[i].id %>"><%= index.form[i].name %></option>
+                            <% } %>
+                        <% } %>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="select-status">Status:</label>
+                    <select class="form-control" id="select-status">
+                        <option value="All">All</option>
+                        <option value="Approved">Approved</option>
+                        <option value="Disapproved">Disapproved</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Cancelled">Cancelled</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="select-type">Department:</label>
+                    <select class="form-control" id="select-department">
+                        <option value="0">All</option>
+                        <% for(var i = 0; i < index.group.length; i++) { %>
+                            <% if(index.group[i].parent_id == null) { %>
+                                <option value="<%= index.group[i].id %>"><%= index.group[i].name %> <%= index.group[i].code ? '(' + index.group[i].code + ')' : '' %></option>
+                            <% } %>
+                        <% } %>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="select-type">Section:</label>
+                    <select class="form-control" id="select-section">
+                        <option value="0">All</option>
+                        <% for(var i = 0; i < index.group.length; i++) { %>
+                            <% if(index.group[i].parent_id != null) { %>
+                                <option class="<%= index.group[i].parent_id %>" value="<%= index.group[i].id %>"><%= index.group[i].name %> <%= index.group[i].code ? '(' + index.group[i].code + ')' : '' %></option>
+                            <% } %>
+                        <% } %>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="select-type">Employee:</label>
+                    <select class="form-control" id="select-employee">
+                        <option value="0">All</option>
+                        <% for(var i = 0; i < index.employee_name.length; i++) { %>
+                            <option value="<%= index.employee_name[i].id %>" department="<%= index.employee_name[i].department %>" section="<%= index.employee_name[i].section %>"><%= index.employee_name[i].employee_name %></option>
+                        <% } %>
+                    </select>
+                </div>
+                <button type="button" class="btn btn-block btn-default btn-flat bg-teal" id="filter-form-list">Filter</button>                
+            </div>
+        </div>
+        <div class="box box-solid">
+            <div class="box-header with-border">
+                <h3 class="box-title">Actions</h3>
+            </div>
+            <div class="box-body">
+                <div>
+                    <!-- <button type="button" class="btn btn-block btn-default btn-flat bg-blue disabled" data-toggle="tooltip" data-placement="top" title="Feature is under maintenance.">Upload Data to Insys</button> -->
+                    <button type="button" class="btn btn-block btn-default btn-flat bg-green" id="export-to-csv">Export this to Excel</button>
+                </div>
+            </div>
+        </div>
+        <div class="box box-solid">
+            <div class="box-header with-border">
+                <h3 class="box-title">Legends</h3>
+            </div>
+            <div class="box-body">
+                <label>Box Color:</label>
+                <div class="external-event" style="cursor:default; background-color:#0AD3FF; color:white;">Official Business</div>
+                <div class="external-event" style="cursor:default; background-color:#FF99C8; color:white;">Overtime</div>
+                <div class="external-event" style="cursor:default; background-color:#FFF100; color:white;">Leave of Absence</div>
+                <label>Border Color:</label>
+                <div class="external-event" style="cursor:default;">Approved (No Border)</div>
+                <div class="external-event" style="cursor:default; border:1.25px  solid #FF0000">Disapproved</div>
+                <div class="external-event" style="cursor:default; border:1.25px  solid #909090">Pending</div>
+                <div class="external-event" style="cursor:default; border:1.25px  solid #FF9933">Cancelled</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <% if(msg) { %>
+            <% if(msg.type == 'success') { %>
+                <div class="alert alert-success alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <h4><i class="icon fa fa-check"></i> Success!</h4>
+                    <%= msg.msg %>
+                </div>
+            <% } %>
+            <% if(msg.type == 'error') { %>
+                <div class="alert alert-danger alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <h4><i class="icon fa fa-ban"></i> Alert!</h4>
+                    <%= msg.msg %>
+                </div>
+            <% } %>
+        <% } %>
+        <div class="alert alert-info alert-dismissible" id="initial-alert-info">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h4><i class="icon fa fa-info-circle"></i> Information</h4>
+            Please choose on the Filter Option to see the Filed Forms.
+        </div>
+        <div class="box box-primary">
+            <!-- <div class="overlay" id="calendar-loading" style="display:none;">
+                <i class="fa fa-cog fa-spin"></i>
+            </div> -->
+            <div class="box-body no-padding">
+                <div id="calendar"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .fc-event {
+        border-width: 1.25px;
+    }
+</style>
+
+<script>
+    var forms = [];
+</script>
+
+<% if(index.forms != null) { %>
+    <%
+        function borderColor(status) {
+            var color = '';
+            switch(status) {
+                case -1: { color = '#FF0000'; break; }
+                case 0: { color = '#909090'; break; }
+                case null: { color = '#FF9933'; break; }
+            }
+            return color;
+        }
+    %>
+    <% if(index.forms.ob != null) { %>
+        <% for(var i = 0; i <= index.forms.ob.length - 1; i++) { %>
+            <% var ob = index.forms.ob[i]; %>
+            <script>
+                var form = {
+                    title: '<%= ob.employee_name %>',
+                    start: new Date('<%= moment(ob.start_date).format("YYYY-MM-DD") %> <%= ob.start_time %>'),
+                    end: new Date('<%= moment(ob.end_date).format("YYYY-MM-DD") %> <%= ob.end_time %>'),
+                    allDay: false,
+                    backgroundColor: "#0AD3FF",
+                    borderColor: "<%= borderColor(ob.status) != '' ? borderColor(ob.status) : '#0AD3FF' %>",
+                    view: {
+                        form_main_id: '1',
+                        form_id: '<%= ob.id %>',
+                        form_type_id: '<%= ob.fob_type %>',
+                        form_name: 'Official Business',
+                        type: '<%= ob.f_name %>',
+                        details: '<%= ob.fob_details %>',
+                        filed_on: '<%= moment(ob.date_filed).format("MMM D, YYYY h:mm A") %>'
+                    }
+                };
+                forms.push(form);
+            </script>
+        <% } %>
+    <% } %>
+
+    <% if(index.forms.ot != null) { %>
+        <% for(var i = 0; i <= index.forms.ot.length - 1; i++) { %>
+            <% var ot = index.forms.ot[i]; %>
+            <script>
+                var form = {
+                    title: '<%= ot.employee_name %>',
+                    start: new Date('<%= moment(ot.start_date).format("YYYY-MM-DD") %> <%= ot.start_time %>'),
+                    end: new Date('<%= moment(ot.end_date).format("YYYY-MM-DD") %> <%= ot.end_time %>'),
+                    allDay: false,
+                    backgroundColor: "#FF99C8",
+                    borderColor: "<%= borderColor(ot.status) != '' ? borderColor(ot.status) : '#FF99C8' %>",
+                    view: {
+                        form_main_id: '2',
+                        form_id: '<%= ot.id %>',
+                        form_type_id: '<%= ot.fot_type %>',
+                        form_name: 'Overtime',
+                        type: '<%= ot.f_name %>',
+                        details: '<%= ot.fot_details %>',
+                        filed_on: '<%= moment(ot.date_filed).format("MMM D, YYYY h:mm A") %>'
+                    }
+                };
+                forms.push(form);
+            </script>
+        <% } %>
+    <% } %>
+
+    <% if(index.forms.loa != null) { %>
+        <% for(var i = 0; i <= index.forms.loa.length - 1; i++) { %>
+            <% var loa = index.forms.loa[i]; %>
+            <script>
+                var form = {
+                    title: '<%= loa.employee_name %>',
+                    start: new Date('<%= moment(loa.start_date).format("YYYY-MM-DD") %> <%= loa.start_time %>'),
+                    end: new Date('<%= moment(loa.end_date).format("YYYY-MM-DD") %> <%= loa.end_time %>'),
+                    allDay: false,
+                    backgroundColor: "#FFF100",
+                    borderColor: "<%= borderColor(loa.status) != '' ? borderColor(loa.status) : '#FFF100' %>",
+                    view: {
+                        form_main_id: '3',
+                        form_id: '<%= loa.id %>',
+                        form_type_id: '<%= loa.floa_type %>',
+                        form_name: 'Leave of Absence',
+                        type: '<%= loa.f_name %>',
+                        details: '<%= loa.floa_details %>',
+                        filed_on: '<%= moment(loa.date_filed).format("MMM D, YYYY h:mm A") %>'
+                    }
+                };
+                forms.push(form);
+            </script>
+        <% } %>
+    <% } %>
+<% } %>

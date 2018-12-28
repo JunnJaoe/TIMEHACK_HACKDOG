@@ -1,0 +1,306 @@
+<!-- Edit OB Modal -->
+<div id="edit-ob-modal" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="submit-edit-ob-form" method="POST" action="/eims/timekeeping/update/ob">
+                <div class="modal-header bg-primary">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Edit Official Business Form</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="edit-ob-id" name="edit-ob-id" value=""/>
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <label for="edit-ob-select-type">Select the type of form to file:</label>
+                            <select class="form-control" id="edit-ob-select-type" name="edit-ob-select-type">
+                                <% for(var i = 0; i < index.form.length; i++) { %>
+                                    <% if(index.form[i].parent_id == 1) { %>
+                                        <option class="<%= index.form[i].parent_id %>" form="<%= index.form[i].id %>" value="<%= index.form[i].id %>"><%= index.form[i].name %></option>
+                                    <% } %>
+                                <% } %>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">                            
+                        <div class="form-group col-md-9">
+                            <label>Date and Time:</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-clock-o"></i>
+                                </div>
+                                <input type="text" class="form-control pull-right" id="edit-ob-date-time" name="edit-ob-date-time" value="<%- moment().format('MM/DD/YYYY') %> 8:30 AM - <%- moment().format('MM/DD/YYYY') %> 5:30 PM">
+                            </div>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Total Days:</label>
+                            <input type="text" class="form-control" id="edit-ob-total" name="edit-ob-total" value="">
+                        </div>
+                    </div>
+                    <div class="row">                            
+                        <div class="form-group col-md-12">
+                            <label>Location:</label>
+                            <input type="text" class="form-control" id="edit-ob-location" name="edit-ob-location">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <label>Details:</label>
+                            <textarea style="resize:none;" class="form-control" rows="3" id="edit-ob-details" name="edit-ob-details"></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label>Objective:</label>
+                            <input type="text" class="form-control" id="edit-ob-objective" name="edit-ob-objective">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Result:</label>
+                            <input type="text" class="form-control" id="edit-ob-result" name="edit-ob-result">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit OT Modal -->
+<div id="edit-ot-modal" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="submit-edit-ot-form" method="POST" action="/eims/timekeeping/update/ot">
+                <div class="modal-header bg-primary">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Edit Overtime Form</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="edit-ot-id" name="edit-ot-id" value=""/>
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <label for="edit-ot-select-type">Select the type of form to file:</label>
+                            <select class="form-control" id="edit-ot-select-type" name="edit-ot-select-type">
+                                <% for(var i = 0; i < index.form.length; i++) { %>
+                                    <% if(index.form[i].parent_id == 2) { %>
+                                        <option class="<%= index.form[i].parent_id %>" form="<%= index.form[i].id %>" value="<%= index.form[i].id %>"><%= index.form[i].name %></option>
+                                    <% } %>
+                                <% } %>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">                            
+                        <div class="form-group col-md-9">
+                            <label>Date and Time:</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-clock-o"></i>
+                                </div>
+                                <input type="text" class="form-control pull-right" id="edit-ot-date-time" name="edit-ot-date-time" value="<%- moment().format('MM/DD/YYYY') %> 8:30 AM - <%- moment().format('MM/DD/YYYY') %> 5:30 PM">
+                            </div>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Total Hours:</label>
+                            <input type="text" class="form-control" id="edit-ot-total" name="edit-ot-total" value="">
+                        </div>
+                    </div>
+                    <div class="row">                            
+                        <div class="form-group col-md-12">
+                            <label>Details:</label>
+                            <textarea style="resize:none;" class="form-control" rows="3" id="edit-ot-details" name="edit-ot-details"></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <label>Accomplishment:</label>
+                            <textarea style="resize:none;" class="form-control" rows="3" id="edit-ot-accomplishment" name="edit-ot-accomplishment"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit LOA Modal -->
+<div id="edit-loa-modal" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="submit-edit-loa-form" method="POST" action="/eims/timekeeping/update/loa">
+                <div class="modal-header bg-primary">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Edit Leave of Absence Form</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="edit-loa-id" name="edit-loa-id" value=""/>
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <label for="edit-loa-select-type">Select the type of form to file:</label>
+                            <select class="form-control" id="edit-loa-select-type" name="edit-loa-select-type">
+                                <% for(var i = 0; i < index.form.length; i++) { %>
+                                    <% if(index.form[i].parent_id == 3) { %>
+                                        <option class="<%= index.form[i].parent_id %>" form="<%= index.form[i].id %>" value="<%= index.form[i].id %>"><%= index.form[i].name %></option>
+                                    <% } %>
+                                <% } %>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">                            
+                        <div class="form-group col-md-9">
+                            <label>Date and Time:</label>
+                            <div class="input-group date">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-clock-o"></i>
+                                </div>
+                                <input type="text" class="form-control pull-right" id="edit-loa-date-time" name="edit-loa-date-time" value="<%- moment().format('MM/DD/YYYY') %> 8:30 AM - <%- moment().format('MM/DD/YYYY') %> 5:30 PM">
+                            </div>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label>Total Days:</label>
+                            <input type="text" class="form-control" id="edit-loa-total" name="edit-loa-total" original-total="0" value="">
+                        </div>
+                    </div>
+                    <div class="row" id="edit-loa-credits" name="edit-loa-credits">
+                        <div class="form-group col-md-6">
+                            <label>Leave Credits Available:</label> <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="top" title="Number of credits you can only add to the current total days of this filed form."></i>
+                            <input type="text" class="form-control" id="edit-loa-original-credits" name="edit-loa-original-credits" style="background-color:white;" value="" readonly>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Leave Credits Balance:</label> <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="top" title="Number of credits left after you file this form."></i>
+                            <input type="text" class="form-control" id="edit-loa-remaining-credits" name="edit-loa-remaining-credits" style="background-color:white;" value="" readonly>
+                        </div>                            
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <label>Details:</label>
+                            <textarea style="resize:none;" class="form-control" rows="3" id="edit-loa-details" name="edit-loa-details"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Comments Modal -->
+<div id="comments-modal" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Comments</h4>
+            </div>
+            <div class="modal-body direct-chat-primary">
+                <!-- Conversations are loaded here -->
+                <div class="direct-chat-messages modal-comments" id="as" style="height:500px; overflow-x:auto;">
+                    <script>
+                        function comment(commenter_id, commenter, timestamp, comment) {
+                            var self_comment = false;
+                            if(commenter_id == '<%- user.employee_id %>') {
+                                self_comment = true;
+                            }
+
+                            $('.modal-comments').append(`
+                                <div class="direct-chat-msg${ self_comment ? ' right' : '' }">
+                                    <div class="direct-chat-info clearfix">
+                                        <span class="direct-chat-name${ self_comment ? ' pull-right' : ' pull-left' }">${commenter}</span>
+                                        <span class="direct-chat-timestamp ${ self_comment ? ' pull-left' : 'pull-right' }">${moment(timestamp).format('D MMM YYYY h:mm a')}</span>
+                                    </div>
+                                    <img class="direct-chat-img" src="/images/user_icon.png" alt="Message User Image">
+                                    <div class="direct-chat-text">
+                                        ${comment}
+                                    </div>
+                                </div>
+                            `);
+                            $('.modal-comments').scrollTop($('.modal-comments').prop("scrollHeight"));
+                        }
+                    </script>
+                </div>
+            </div>
+            <div class="modal-footer modal-comment-box">
+                <div class="input-group">
+                    <input type="text" id="message" name="message" sender-id="<%- user.employee_id %>" sender-name="<%= user.first_name %> <%= user.last_name %>" placeholder="Type Message ..." class="form-control"/>
+                    <span class="input-group-btn">
+                        <button type="button" id="add-comment" class="btn btn-primary btn-flat">Send</button>
+                    </span>
+                </div>
+                <div class="col-md-12 text-center" id="send-error-message" style="display:none; font-size:12px; color:red;">
+                    Error
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Cancel Modal -->
+<div id="cancel-modal" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="submit-cancel-form" method="POST" action="/eims/timekeeping/cancel-form">
+                <div class="modal-header bg-yellow">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Cancellation Details</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="cancel-form" name="cancel-form" value=""/>
+                    <input type="hidden" id="cancel-id" name="cancel-id" value=""/>
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            Tell us why you want to cancel this filed form:
+                            <textarea style="resize:none;" class="form-control" rows="2" id="cancel-reason" name="cancel-reason"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-warning">Cancel Now</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Keep this</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Modal -->
+<div id="delete-modal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <form id="submit-delete-form" method="POST" action="/eims/timekeeping/delete-form">
+                <div class="modal-header bg-red">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Delete Confirmation</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="delete-form" name="delete-form" value=""/>
+                    <input type="hidden" id="delete-id" name="delete-id" value=""/>
+                    <p>Are you sure you want to delete this?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger">Yes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

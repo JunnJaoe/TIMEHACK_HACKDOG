@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8"> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title><%= page.title %></title>
+        <%- include('./default/header.html'); %>
+        <link rel="stylesheet" href="/styles/login.css"/>
+    </head>
+
+    <body>
+        <div class="login-box" id="corners" style="background-color:rgba(255,255,255,0.75); height:400px; width:800px; display:block; margin-top:130px;">
+            <div class="col-md-12">
+                <div class="col-md-6" style="background-color:rgba(0,0,0,0); padding:50px; margin-top:20px;">
+                    <font size="15px" face="Calibri" color="#2980B9">Login</font><br>
+                    <div id="login-failed" style="font-size:14px; font-weight:bold; color:red; text-align:center; padding:20px; margin-top:-30px; margin-bottom:-15px;">
+                        Username or password is incorrect.
+                    </div>
+                    <form id="login-form" onsubmit="return false;">
+                        <div class="form-group has-feedback">
+                            <input type="text" name="username" id="username" class="form-control input-lg" placeholder="Email Address" required/>
+                            <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                        </div>
+                        <div class="form-group has-feedback">
+                            <input type="password" name="password" id="password" class="form-control input-lg" placeholder="Password" required/>
+                            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <button type="submit" id="login-button" class="btn btn-primary btn-block btn-flat btn-lg">Login</button>
+                                <div id="login-loading" style="color:#04327f; font-size:32px; text-align:center; display:none;">
+                                    <div class="overlay"><i class="fa fa-refresh fa-spin"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="col-md-6" style="margin-top:70px;">
+                    <img style="display:block; margin-left: 50px; margin-top: 20px;" width="auto" height="120px" src="images/logo_qbos.png"/>
+                    <font size="2px" color="#2980B9" face="Calibri" style="margin-bottom: 5px"><center>Q u e s t r o n i x&ensp;B a c k&ensp;O f f i c e&ensp;S y s t e m </center></font>
+                    <font size="2px" color="#797D7F" face="Calibri" style="margin-bottom: 5px"><center>_____________________________________________</center></font>
+                    <font size="3px" color="#566573" face="Calibri"><center>The Back Office of Questronix that</center></font>
+                    <font size="3px" color="#566573" face="Calibri"><center>    connects and make our work</center></font>
+                    <font size="3px" color="#566573" face="Calibri"><center>       a little bit easier</center></font>        
+                </div>
+            </div>
+        </div>
+
+        <%- include('./default/footer.html'); %>
+        <script type="text/javascript" src="/scripts/login.js"></script>
+    </body>
+</html>

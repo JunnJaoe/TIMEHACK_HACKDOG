@@ -1,0 +1,316 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8"> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title><%= page.title %></title>
+        <%- include('../default/header.html'); %>
+        <link rel="stylesheet" href="/plugins/daterangepicker/daterangepicker.css"/>
+        <link rel="stylesheet" href="/plugins/datatables/dataTables.bootstrap.css"/>
+    </head>
+    <body class="hold-transition skin-blue sidebar-mini">
+        <div class="wrapper">
+            <%- include('./default/navbar.html'); %>
+            <%- include('./default/sidebar.html'); %>
+            <script>
+                var comments_ob = [];
+                var comments_ot = [];
+                var comments_loa = [];
+            </script>
+                    
+            <div class="content-wrapper">
+                <div>
+                    <section class="content-header">
+                        <h1>
+                            Timekeeping Module
+                            <small>Here is the list of the filed forms that needs your approval</small>
+                        </h1>
+                    </section>
+        
+                    <section class="content">
+                        <% if(msg) { %>
+                            <% if(msg.type == 'success') { %>
+                                <div class="alert alert-success alert-dismissible">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    <h4><i class="icon fa fa-check"></i> Success!</h4>
+                                    <%= msg.msg %>
+                                </div>
+                            <% } %>
+                            <% if(msg.type == 'error') { %>
+                                <div class="alert alert-danger alert-dismissible">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    <h4><i class="icon fa fa-ban"></i> Alert!</h4>
+                                    <%= msg.msg %>
+                                </div>
+                            <% } %>
+                        <% } %>
+                        <div class="nav-tabs-custom">
+                            <ul class="nav nav-tabs pull-right">
+                                <% for(var i = index.form.length - 1; i >= 0; i--) { %>
+                                    <% if(index.form[i].parent_id == null) { %>
+                                        <li class="tab-form<%- (i == 0 ? ' active' : '') %>" form="<%= index.form[i].id %>"  tab-name="<%= index.form[i].name %>"><a href="#" data-toggle="tab" form-tab="<%= index.form[i].id %>"><%= index.form[i].name %></a></li>
+                                    <% } %>
+                                <% } %>
+                                <li class="pull-left header"><i class="fa fa-inbox"></i> Approval List</li>
+                                <li class="pull-left header">
+                                    <div class="input-group">
+                                        <button type="button" class="btn btn-default pull-right" id=filter-list>
+                                            <span>
+                                                <i class="fa fa-calendar"></i> 
+                                            </span>
+                                            <i class="fa fa-caret-down"></i>
+                                        </button>
+                                    </div>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="tab-ob" tab-name="Official Business">
+                                    <table id="table-ob" class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Date and Time Filed</th>
+                                                <th>Name of Employee</th>
+                                                <th>Start Date and Time</th>
+                                                <th>End Date and Time</th>
+                                                <th>Form Type</th>
+                                                <th>Total Days</th>
+                                                <th>Location</th>
+                                                <th>Details</th>
+                                                <th>Objectives</th>
+                                                <th>Result</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% for(var i = 0; i <= index.ob.data.length - 1; i++) { %>
+                                                <% var ob = index.ob.data[i]; %>
+                                                <tr class="tr-ob" id="<%= ob.id %>">
+                                                    <td class="td-ob-filed-date">
+                                                        <%= moment(ob.date_filed).format('MM/DD/YYYY h:mm A') %>
+                                                    </td>
+                                                    <td class="td-ob-fob-type" id="<%= ob.fob_type %>"><%= ob.employee_name %></td>
+                                                    <td class="td-ob-start-date">
+                                                        <%= moment(ob.start_date).format('MM/DD/YYYY') %> <%= moment(ob.start_time, 'HH:mm:ss').format('h:mm A') %>
+                                                    </td>
+                                                    <td class="td-ob-end-date">
+                                                        <%= moment(ob.end_date).format('MM/DD/YYYY') %> <%= moment(ob.end_time, 'HH:mm:ss').format('h:mm A') %>
+                                                    </td>
+                                                    <td class="td-ob-fob-type" id="<%= ob.fob_type %>"><%= ob.fob_name %></td>
+                                                    <td class="td-ob-total-days"><%= ob.total_days %></td>
+                                                    <td class="td-ob-location"><%= ob.location %></td>
+                                                    <td class="td-ob-fob-details"><%= ob.fob_details %></td>
+                                                    <td class="td-ob-objective"><%= ob.objective %></td>
+                                                    <td class="td-ob-result"><%= ob.result %></td>
+                                                    <td>
+                                                        <% if(ob.status != null) { %>
+                                                            <% if(ob.status == 1) { %>
+                                                                <button type="button" class="btn btn-success btn-block btn-xs disabled" data-toggle="tooltip" data-placement="top" title="You approved this.">Approved</button>
+                                                            <% } else if(ob.status == -1) { %>
+                                                                <button type="button" class="btn btn-danger btn-block btn-xs disabled" data-toggle="tooltip" data-placement="top" title="You disapproved this.">Disapproved</button>
+                                                            <% } else { %>
+                                                                <button type="button" class="btn btn-success btn-block btn-xs approve-form">Approve</button>
+                                                                <button type="button" class="btn btn-danger btn-block btn-xs disapprove-form">Disapprove</button>
+                                                            <% } %>
+                                                        <% } else { %>
+                                                            <button type="button" class="btn btn-warning btn-block btn-xs disabled" data-toggle="tooltip" data-placement="top" title="Reason: <%= ob.reason_for_cancel %>">Cancelled</button>
+                                                        <% } %>
+                                                        <% var comments_count = 0; %>
+                                                        <% for(var j = 0; j <= index.ob_comments.data.length - 1; j++) { %>
+                                                            <% var ob_comments = index.ob_comments.data[j]; %>
+                                                            <% if(ob_comments.form_id == ob.id) { %>
+                                                                <% comments_count++; %>
+                                                                <script>
+                                                                    var comments = {
+                                                                        form_id: '<%= ob_comments.form_id %>',
+                                                                        id: '<%= ob_comments.id %>',
+                                                                        commenter_id: '<%= ob_comments.employee_id %>',
+                                                                        commenter: '<%= ob_comments.employee_name %>',
+                                                                        content: '<%= ob_comments.comment %>',
+                                                                        date: '<%= ob_comments.comment_date %>',
+                                                                    };
+                                                                    comments_ob.push(comments);
+                                                                </script>
+                                                            <% } %>
+                                                        <% } %>
+                                                        <% if(comments_count > 0) { %>
+                                                            <button type="button" class="btn btn-primary btn-block btn-xs form-comments" style="margin-top:5px;" form-id="<%= ob.id %>" data-toggle="tooltip" data-placement="top" title="Click to view/add comments."><%= comments_count %> Comment<%= comments_count > 1 ? 's' : '' %></button>
+                                                        <% } else { %>
+                                                            <button type="button" class="btn btn-primary btn-block btn-xs form-comments" form-id="<%= ob.id %>" data-toggle="tooltip" data-placement="top" title="Click to add comment.">Add Comment</button>
+                                                        <% } %>
+                                                    </td>
+                                                </tr>
+                                            <% } %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane" id="tab-ot" tab-name="Overtime">
+                                    <table id="table-ot" class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Date and Time Filed</th>
+                                                <th>Name of Employee</th>
+                                                <th>Start Date and Time</th>
+                                                <th>End Date and Time</th>
+                                                <th>Form Type</th>
+                                                <th>Total Hours</th>
+                                                <th>Details</th>
+                                                <th>Accomplishment</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% for(var i = 0; i <= index.ot.data.length - 1; i++) { %>
+                                                <% var ot = index.ot.data[i]; %>
+                                                <tr class="tr-ot" id="<%= ot.id %>">
+                                                    <td class="td-ot-filed-date">
+                                                        <%= moment(ot.date_filed).format('MM/DD/YYYY h:mm A') %>
+                                                    </td>
+                                                    <td class="td-ot-fot-type" id="<%= ot.fot_type %>"><%= ot.employee_name %></td>
+                                                    <td class="td-ot-start-date">
+                                                        <%= moment(ot.start_date).format('MM/DD/YYYY') %> <%= moment(ot.start_time, 'HH:mm:ss').format('h:mm A') %>
+                                                    </td>
+                                                    <td class="td-ot-end-date">
+                                                        <%= moment(ot.end_date).format('MM/DD/YYYY') %> <%= moment(ot.end_time, 'HH:mm:ss').format('h:mm A') %>
+                                                    </td>
+                                                    <td class="td-ot-fot-type" id="<%= ot.fot_type %>"><%= ot.fot_name %></td>
+                                                    <td class="td-ot-total-hours"><%= ot.total_hours %></td>
+                                                    <td class="td-ot-fot-details"><%= ot.fot_details %></td>
+                                                    <td class="td-ot-accomplishment"><%= ot.accomplishment %></td>
+                                                    <td>
+                                                        <% if(ot.status != null) { %>
+                                                            <% if(ot.status == 1) { %>
+                                                                <button type="button" class="btn btn-success btn-block btn-xs disabled" data-toggle="tooltip" data-placement="top" title="You approved this.">Approved</button>
+                                                            <% } else if(ot.status == -1) { %>
+                                                                <button type="button" class="btn btn-danger btn-block btn-xs disabled" data-toggle="tooltip" data-placement="top" title="You disapproved this.">Disapproved</button>
+                                                            <% } else { %>
+                                                                <button type="button" class="btn btn-success btn-block btn-xs approve-form">Approve</button>
+                                                                <button type="button" class="btn btn-danger btn-block btn-xs disapprove-form">Disapprove</button>
+                                                            <% } %>
+                                                        <% } else { %>
+                                                            <button type="button" class="btn btn-warning btn-block btn-xs disabled" data-toggle="tooltip" data-placement="top" title="Reason: <%= ot.reason_for_cancel %>">Cancelled</button>
+                                                        <% } %>
+                                                        <% var comments_count = 0; %>
+                                                        <% for(var j = 0; j <= index.ot_comments.data.length - 1; j++) { %>
+                                                            <% var ot_comments = index.ot_comments.data[j]; %>
+                                                            <% if(ot_comments.form_id == ot.id) { %>
+                                                                <% comments_count++; %>
+                                                                <script>
+                                                                    var comments = {
+                                                                        form_id: '<%= ot_comments.form_id %>',
+                                                                        id: '<%= ot_comments.id %>',
+                                                                        commenter_id: '<%= ot_comments.employee_id %>',
+                                                                        commenter: '<%= ot_comments.employee_name %>',
+                                                                        content: '<%= ot_comments.comment %>',
+                                                                        date: '<%= ot_comments.comment_date %>',
+                                                                    };
+                                                                    comments_ot.push(comments);
+                                                                </script>
+                                                            <% } %>
+                                                        <% } %>
+                                                        <% if(comments_count > 0) { %>
+                                                            <button type="button" class="btn btn-primary btn-block btn-xs form-comments" style="margin-top:5px;" form-id="<%= ot.id %>" data-toggle="tooltip" data-placement="top" title="Click to view/add comments."><%= comments_count %> Comment<%= comments_count > 1 ? 's' : '' %></button>
+                                                        <% } else { %>
+                                                            <button type="button" class="btn btn-primary btn-block btn-xs form-comments" form-id="<%= ot.id %>" data-toggle="tooltip" data-placement="top" title="Click to add comment.">Add Comment</button>
+                                                        <% } %>
+                                                    </td>
+                                                </tr>
+                                            <% } %>                                            
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="tab-pane" id="tab-loa" tab-name="Leave of Absence">
+                                    <table id="table-loa" class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Date and Time Filed</th>
+                                                <th>Name of Employee</th>
+                                                <th>Start Date and Time</th>
+                                                <th>End Date and Time</th>
+                                                <th>Form Type</th>
+                                                <th>Total Days</th>
+                                                <th>Details</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% for(var i = 0; i <= index.loa.data.length - 1; i++) { %>
+                                                <% var loa = index.loa.data[i]; %>
+                                                <tr class="tr-loa" id="<%= loa.id %>">
+                                                    <td class="td-loa-filed-date">
+                                                        <%= moment(loa.date_filed).format('MM/DD/YYYY h:mm A') %>
+                                                    </td>
+                                                    <td class="td-loa-floa-type" id="<%= loa.floa_type %>"><%= loa.employee_name %></td>
+                                                    <td class="td-loa-start-date">
+                                                        <%= moment(loa.start_date).format('MM/DD/YYYY') %> <%= moment(loa.start_time, 'HH:mm:ss').format('h:mm A') %>
+                                                    </td>
+                                                    <td class="td-loa-end-date">
+                                                        <%= moment(loa.end_date).format('MM/DD/YYYY') %> <%= moment(loa.end_time, 'HH:mm:ss').format('h:mm A') %>
+                                                    </td>
+                                                    <td class="td-loa-floa-type" id="<%= loa.floa_type %>"><%= loa.floa_name %></td>
+                                                    <td class="td-loa-total-days"><%= loa.total_days %></td>
+                                                    <td class="td-loa-floa-details"><%= loa.floa_details %></td>
+                                                    <td>
+                                                        <% if(loa.status != null) { %>
+                                                            <% if(loa.status == 1) { %>
+                                                                <button type="button" class="btn btn-success btn-block btn-xs disabled" data-toggle="tooltip" data-placement="top" title="You approved this.">Approved</button>
+                                                            <% } else if(loa.status == -1) { %>
+                                                                <button type="button" class="btn btn-danger btn-block btn-xs disabled" data-toggle="tooltip" data-placement="top" title="You disapproved this.">Disapproved</button>
+                                                            <% } else { %>
+                                                                <button type="button" class="btn btn-success btn-block btn-xs approve-form">Approve</button>
+                                                                <button type="button" class="btn btn-danger btn-block btn-xs disapprove-form">Disapprove</button>
+                                                            <% } %>
+                                                        <% } else { %>
+                                                            <button type="button" class="btn btn-warning btn-block btn-xs disabled" data-toggle="tooltip" data-placement="top" title="Reason: <%= loa.reason_for_cancel %>">Cancelled</button>
+                                                        <% } %>
+                                                        <% var comments_count = 0; %>
+                                                        <% for(var j = 0; j <= index.loa_comments.data.length - 1; j++) { %>
+                                                            <% var loa_comments = index.loa_comments.data[j]; %>
+                                                            <% if(loa_comments.form_id == loa.id) { %>
+                                                                <% comments_count++; %>
+                                                                <script>
+                                                                    var comments = {
+                                                                        form_id: '<%= loa_comments.form_id %>',
+                                                                        id: '<%= loa_comments.id %>',
+                                                                        commenter_id: '<%= loa_comments.employee_id %>',
+                                                                        commenter: '<%= loa_comments.employee_name %>',
+                                                                        content: '<%= loa_comments.comment %>',
+                                                                        date: '<%= loa_comments.comment_date %>',
+                                                                    };
+                                                                    comments_loa.push(comments);
+                                                                </script>
+                                                            <% } %>
+                                                        <% } %>
+                                                        <% if(comments_count > 0) { %>
+                                                            <button type="button" class="btn btn-primary btn-block btn-xs form-comments" style="margin-top:5px;" form-id="<%= loa.id %>" data-toggle="tooltip" data-placement="top" title="Click to view/add comments."><%= comments_count %> Comment<%= comments_count > 1 ? 's' : '' %></button>
+                                                        <% } else { %>
+                                                            <button type="button" class="btn btn-primary btn-block btn-xs form-comments" form-id="<%= loa.id %>" data-toggle="tooltip" data-placement="top" title="Click to add comment.">Add Comment</button>
+                                                        <% } %>
+                                                    </td>
+                                                </tr>
+                                            <% } %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>            
+                    </section>
+                </div>
+            </div>
+            <footer class="main-footer">
+                <div>
+                    <div class="pull-right hidden-xs">
+                        <b>Version</b> 1.0.0
+                    </div>
+                    <strong>Copyright &copy; 2017 <a href="http://www.questronix.com.ph" target="_blank">Questronix Corporation</a>.</strong> All rights reserved.
+                </div>
+            </footer>
+        </div>
+        <%- include('../default/footer.html'); %>
+        <%- include('./employee/timekeeping-approval-modals.html'); %>
+        <script type="text/javascript" src="/modules/moment/min/moment.min.js"></script>
+        <script type="text/javascript" src="/plugins/daterangepicker/daterangepicker.js"></script>
+        <script type="text/javascript" src="/plugins/datatables/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" src="/plugins/datatables/dataTables.bootstrap.min.js"></script>
+        <script type="text/javascript" src="/scripts/eims/timekeeping-approval.js"></script>             
+    </body>
+</html>

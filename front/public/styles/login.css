@@ -1,0 +1,19 @@
+body { 
+    /* The image used */
+    background-image: url("../images/bg_qbos_login.png");
+
+    /* Set a specific height */
+    height: 645px; 
+                        
+    /* Create the parallax scrolling effect */
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    /* Hide scroll bars */
+    overflow: hidden;
+}
+#corners {
+    border-radius: 15px 15px 15px 15px;
+}

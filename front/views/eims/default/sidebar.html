@@ -1,0 +1,69 @@
+<aside class="main-sidebar">
+    <section class="sidebar">
+        <ul class="sidebar-menu">
+            <li class="header">LIST OF MODULES</li>
+            <%
+                if(user.access_type == 'admin') {
+                    var module_names = [], module_codes = [];
+                    for(var i = 0; i < user.admin_access[0].modules.length; i++) {
+                        module_names.push(user.admin_access[0].modules[i].module_name);
+                        module_codes.push(user.admin_access[0].modules[i].module_code);
+                    }
+                }
+            %>
+            <% if(user.access_type == 'admin') { %>
+                <% if(module_names.indexOf('Privilege Module') !== -1 && module_codes.indexOf('PM') !== -1) { %>
+                    <li<%- (page.module == 'privilege') ? ' class="active"' : '' %>><a href="/eims/privilege"><i class="fa fa-user-secret"></i> <span>Privilege</span></a></li>
+                <% } %>
+                <% if(module_names.indexOf('Employee Information Module') !== -1 && module_codes.indexOf('EIM') !== -1) { %>
+                    <li<%- (page.module == 'employee-information') ? ' class="active"' : '' %>><a href="/eims/employee-information"><i class="fa fa-user-circle-o"></i> <span>Employee Information</span></a></li>
+                <% } %>
+                <% if(module_names.indexOf('Timekeeping Module') !== -1 && module_codes.indexOf('TM') !== -1) { %>
+                    <li class="treeview<%- (page.module == 'timekeeping') ? ' active' : '' %>">
+                        <a href="#">
+                            <i class="fa fa-clock-o"></i> <span>Timekeeping</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>                                            
+                        </a>
+                        <ul class="treeview-menu">
+                            <li<%- (page.module == 'timekeeping') ? ' class="active"' : '' %>><a href="/eims/timekeeping"><i class="fa fa-circle-o"></i> <span>OB, OT, & LOA Forms</span></a></li>                        
+                        </ul>
+                    </li>
+                <% } %>
+                <% if(module_names.indexOf('Recruitment Module') !== -1 && module_codes.indexOf('RM') !== -1) { %>
+                    <li<%- (page.module == 'recruitment') ? ' class="active"' : '' %>><a href="/eims/recruitment"><i class="fa fa-users"></i> <span>Recruitment</span></a></li>
+                <% } %>
+                <!-- <% if(module_names.indexOf('Organization Mapping Module') !== -1 && module_codes.indexOf('OM') !== -1) { %>
+                    <li><a href="/eims/org-mapping"><i class="fa fa-sitemap"></i> <span>Organization Mapping</span></a></li>
+                    <% } %>
+                <% if(module_names.indexOf('Compensation & Benefits Module') !== -1 && module_codes.indexOf('CBM') !== -1) { %>
+                    <li><a href="/eims/compensation-benefits"><i class="fa fa-thumbs-up"></i> <span>Compensation & Benefits</span></a></li>
+                <% } %>
+                <% if(module_names.indexOf('Performance & Evaluation Module') !== -1 && module_codes.indexOf('PEM') !== -1) { %>
+                    <li><a href="/eims/performance-evaluation"><i class="fa fa-comments-o"></i> <span>Performance & Evaluation</span></a></li>
+                <% } %> -->
+            <% } else { %>
+                <li<%- (page.module == 'employee-information') ? ' class="active"' : '' %>><a href="/eims/employee-information"><i class="fa fa-user-circle-o"></i> <span>Employee Information</span></a></li>
+                <li class="treeview<%- (page.module == 'timekeeping' || page.module == 'timekeeping-approval') ? ' active' : '' %>">
+                    <a href="#">
+                        <i class="fa fa-clock-o"></i> <span>Timekeeping</span>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>                                            
+                    </a>
+                    <ul class="treeview-menu">
+                        <li<%- (page.module == 'timekeeping') ? ' class="active"' : '' %>><a href="/eims/timekeeping"><i class="fa fa-circle-o"></i> <span>OB, OT, & LOA Forms</span></a></li>
+                        <% if(user.reporting_employee_count > 0) { %>
+                            <li<%- (page.module == 'timekeeping-approval') ? ' class="active"' : '' %>><a href="/eims/timekeeping/approval"><i class="fa fa-circle-o"></i> <span>Approval List</span></a></li>
+                        <% } %>
+                    </ul>
+                </li>            
+                <li<%- (page.module == 'recruitment') ? ' class="active"' : '' %>><a href="/eims/recruitment"><i class="fa fa-users"></i> <span>Recruitment</span></a></li>
+                <!-- <li><a href="/eims/org-mapping"><i class="fa fa-sitemap"></i> <span>Organization Mapping</span></a></li>
+                <li><a href="/eims/compensation-benefits"><i class="fa fa-thumbs-up"></i> <span>Compensation & Benefits</span></a></li>
+                <li><a href="/eims/performance-evaluation"><i class="fa fa-comments-o"></i> <span>Performance & Evaluation</span></a></li> -->
+            <% } %>
+        </ul>
+    </section>
+</aside>

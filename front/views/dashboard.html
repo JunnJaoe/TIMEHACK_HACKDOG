@@ -1,0 +1,152 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8"> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title><%= page.title %></title>
+        <%- include('./default/header.html'); %>
+        <link rel="stylesheet" href="/styles/system_card.css"/>
+    </head>
+    <body class="hold-transition skin-blue layout-top-nav">
+        <div class="wrapper">
+            <header class="main-header">
+                <nav class="navbar navbar-static-top">
+                    <div class="container">
+                        <div class="navbar-header">
+                            <% if(user.access_type == 'admin') { %>
+                                <a href="/" class="navbar-brand"><b>Q</b>BOS <b>|</b> <span style="font-size:15px;">Administrator Mode</span></a>
+                            <% } else { %>
+                                <a href="/" class="navbar-brand"><b>Q</b>BOS</a>
+                            <% } %>
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                        </div>
+        
+                        <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+                            <ul class="nav navbar-nav">
+                                <li class="active"><a href="/dashboard">Dashboard</a></li>
+                                <li><a href="/eims">EIMS</a></li>
+                            </ul>
+                        </div>
+                        <div class="navbar-custom-menu">
+                            <ul class="nav navbar-nav">
+                                <li class="dropdown user user-menu">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                        <img src="/images/user_icon.png" class="user-image" alt="User Image">
+                                        <span class="hidden-xs"><%= user.first_name %> <%= user.last_name %>&nbsp;&nbsp;&nbsp;<i class="fa fa-caret-down" aria-hidden="true"></i></span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li class="user-header" style="height:auto;">
+                                            <img src="/images/user_icon.png" class="img-circle" alt="User Image">
+                                            <p>
+                                                <%= user.first_name %> <%= user.last_name %>
+                                                <small style="font-size:14px; font-style:italic;"><%= user.position %></small>
+                                                <small>Employee since <%= moment(user.start_date).format('MMMM YYYY') %></small>
+                                            </p>
+                                        </li>
+                                        <li class="user-footer">
+                                            <% if(user.admin_access != null) { %>
+                                                <div class="pull-left">
+                                                    <a href="/changerole/<%= user.access_type == 'admin' ? 'employee' : 'admin' %>" class="btn btn-info btn-flat"><%= user.access_type == 'admin' ? 'Employee' : 'Administrator' %> Mode</a>
+                                                </div>
+                                            <% } %>        
+                                            <div class="pull-right">
+                                                <a href="/logout" class="btn btn-default btn-flat">Logout</a>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            </header>
+
+            <div class="content-wrapper">
+                <div class="container">
+                    <section class="content-header">
+                        <h1>
+                            Questronix Back Office System
+                            <small>Please choose the system you want to access</small>
+                        </h1>
+                    </section>
+        
+                    <section class="content">
+                        <%
+                            var admin_system_code = [];
+                            if(user.admin_access != null) {
+                                for(var i = 0; i < user.admin_access.length; i++) {
+                                    admin_system_code.push(user.admin_access[i].system_code);
+                                }
+                            }
+                        %>
+                        <div class="system_container">
+                            <div class="column" style="margin-left:400px;">
+                                <div class="post-module" id="module_eims" style="cursor:pointer; cursor:hand;">
+                                    <div class="system_thumbnail">
+                                        <% if(admin_system_code.indexOf("EIMS") !== -1) { %>
+                                            <div class="admin_indicator" id="admin_module_eims" data-toggle="tooltip" data-placement="left" title="You are administrator here." style="background-color:dodgerblue;">
+                                                <i class="fa fa-star" style="font-size:30px;" aria-hidden="true"></i>
+                                            </div>
+                                        <% } %>
+                                        <img src="/images/card_eims.jpg"/>
+                                    </div>
+                                    <div class="post-content">
+                                        <div class="category" style="background-color:dodgerblue;">EIMS</div>
+                                        <h1 class="title">Employee Information Management System</h1>
+                                        <h2 class="sub_title" style="color:dodgerblue;">System for your employee information.</h2>
+                                        <p class="description">Includes Employee Information and Online Filing of OBs, OTs, LOAs, and TOIL.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Add this when the two modules are available already. -->
+                            <!--<div class="column">
+                                <div class="post-module" style="cursor:pointer; cursor:hand;">
+                                    <div class="system_thumbnail">
+                                        <div class="admin_indicator" style="background-color:gold;">
+                                            <i class="fa fa-star" style="font-size:30px;" aria-hidden="true"></i>
+                                        </div>
+                                        <img src="/images/card_psc.jpg"/>
+                                    </div>
+                                    <div class="post-content">
+                                        <div class="category" style="background-color:gold;">PSC</div>
+                                        <h1 class="title">Procurement and Supply Chain</h1>
+                                        <h2 class="sub_title" style="color:gold;">System for procurement and supply request.</h2>
+                                        <p class="description">Information about PSC.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="post-module" style="cursor:pointer; cursor:hand;">
+                                    <div class="system_thumbnail">
+                                        <div class="admin_indicator" style="background-color:tomato;">
+                                            <i class="fa fa-star" style="font-size:30px;" aria-hidden="true"></i>
+                                        </div>
+                                        <img src="/images/card_pms.jpg"/>
+                                    </div>
+                                    <div class="post-content">
+                                        <div class="category" style="background-color:tomato;">PMS</div>
+                                        <h1 class="title">Property Management System</h1>
+                                        <h2 class="sub_title" style="color:tomato;">System for your property.</h2>
+                                        <p class="description">Information about PMS.</p>
+                                    </div>
+                                </div> -->
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <footer class="main-footer">
+                <div class="container">
+                    <div class="pull-right hidden-xs">
+                        <b>Version</b> 1.0.0
+                    </div>
+                    <strong>Copyright &copy; 2017 <a href="http://www.questronix.com.ph" target="_blank">Questronix Corporation</a>.</strong> All rights reserved.
+                </div>
+            </footer>
+        </div>
+        <%- include('./default/footer.html'); %>
+        <script type="text/javascript" src="/scripts/system_card.js"></script> 
+    </body>
+</html>

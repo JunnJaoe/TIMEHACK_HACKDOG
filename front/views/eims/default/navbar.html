@@ -1,0 +1,60 @@
+<header class="main-header">
+    <a href="/eims" class="logo">
+        <span class="logo-mini">EI</span>
+        <span class="logo-lg">EIMS</span>
+    </a>                
+    <nav class="navbar navbar-static-top">
+        <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+            <span class="sr-only">Toggle navigation</span>
+        </a>
+        <div>
+            <div class="navbar-header">
+                <% if(user.access_type == 'admin') { %>
+                    <a href="/" class="navbar-brand"><b>Q</b>BOS <b>|</b> <span style="font-size:15px;">Administrator Mode</span></a>
+                <% } else { %>
+                    <a href="/" class="navbar-brand"><b>Q</b>BOS</a>
+                <% } %>
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+                    <i class="fa fa-bars"></i>
+                </button>
+            </div>
+
+            <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="/dashboard">Dashboard</a></li>
+                    <li class="active"><a href="/eims">EIMS</a></li>
+                </ul>
+            </div>
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="/images/user_icon.png" class="user-image" alt="User Image">
+                            <span class="hidden-xs"><%= user.first_name %> <%= user.last_name %>&nbsp;&nbsp;&nbsp;<i class="fa fa-caret-down" aria-hidden="true"></i></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="user-header" style="height:auto;">
+                                <img src="/images/user_icon.png" class="img-circle" alt="User Image">
+                                <p>
+                                    <%= user.first_name %> <%= user.last_name %>
+                                    <small style="font-size:14px; font-style:italic;"><%= user.position %></small>
+                                    <small>Employee since <%= moment(user.start_date).format('MMMM YYYY') %></small>
+                                </p>
+                            </li>
+                            <li class="user-footer">
+                                <% if(user.admin_access != null) { %>
+                                    <div class="pull-left">
+                                        <a href="/changerole/<%= user.access_type == 'admin' ? 'employee' : 'admin' %>" class="btn btn-info btn-flat"><%= user.access_type == 'admin' ? 'Employee' : 'Administrator' %> Mode</a>
+                                    </div>
+                                <% } %>        
+                                <div class="pull-right">
+                                    <a href="/logout" class="btn btn-default btn-flat" onclick="sessionStorage.clear();">Logout</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>

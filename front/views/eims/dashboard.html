@@ -1,0 +1,211 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8"> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title><%= page.title %></title>
+        <%- include('../default/header.html'); %>
+    </head>
+    <body class="hold-transition skin-blue sidebar-mini">
+        <div class="wrapper">
+            <%- include('./default/navbar.html'); %>
+            <%- include('./default/sidebar.html'); %>
+                    
+            <div class="content-wrapper">
+                <div>
+                    <section class="content-header">
+                        <h1>
+                            Employee Information Management System
+                            <small>Please choose the module you want to access</small>
+                        </h1>
+                    </section>
+        
+                    <section class="content">
+                        <%
+                            if(user.access_type == 'admin') {
+                                var module_names = [], module_codes = [];
+                                for(var i = 0; i < user.admin_access[0].modules.length; i++) {
+                                    module_names.push(user.admin_access[0].modules[i].module_name);
+                                    module_codes.push(user.admin_access[0].modules[i].module_code);
+                                }
+                            }
+                        %>
+                        <% if(user.access_type == 'admin') { %>
+                            <div class="row">
+                                <% if(module_names.indexOf('Privilege Module') !== -1 && module_codes.indexOf('PM') !== -1) { %>
+                                    <div class="col-lg-3 col-xs-6">
+                                        <div class="small-box bg-red" style="cursor:pointer;" onclick="window.location.href='/eims/privilege'">
+                                            <div class="inner">
+                                                <h3>PM</h3>
+                                                <p>Privilege<br/>Module</p>
+                                            </div>
+                                            <div class="icon">
+                                                <i class="fa fa-user-secret"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% } %>
+                                <% if(module_names.indexOf('Employee Information Module') !== -1 && module_codes.indexOf('EIM') !== -1) { %>
+                                    <div class="col-lg-3 col-xs-6">
+                                        <div class="small-box bg-aqua" style="cursor:pointer;" onclick="window.location.href='/eims/employee-information'">
+                                            <div class="inner">
+                                                <h3>EIM</h3>
+                                                <p>Employee Information<br/>Module</p>
+                                            </div>
+                                            <div class="icon">
+                                                <i class="fa fa-user-circle-o"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% } %>
+                                <% if(module_names.indexOf('Timekeeping Module') !== -1 && module_codes.indexOf('TM') !== -1) { %>
+                                    <div class="col-lg-3 col-xs-6">
+                                        <div class="small-box bg-green" style="cursor:pointer;" onclick="window.location.href='/eims/timekeeping'">
+                                            <div class="inner">
+                                                <h3>TM</h3>
+                                                <p>Timekeeping<br/>Module</p>
+                                            </div>
+                                            <div class="icon">
+                                                <i class="fa fa-clock-o"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% } %>
+                                <% if(module_names.indexOf('Recruitment Module') !== -1 && module_codes.indexOf('RM') !== -1) { %>
+                                    <div class="col-lg-3 col-xs-6">
+                                        <div class="small-box bg-purple" style="cursor:pointer;" onclick="window.location.href='/eims/recruitment'">
+                                            <div class="inner">
+                                                <h3>RM</h3>
+                                                <p>Recruitment<br/>Module</p>
+                                            </div>
+                                            <div class="icon">
+                                                <i class="fa fa-users"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% } %>
+                                <% if(module_names.indexOf('Organization Mapping Module') !== -1 && module_codes.indexOf('OM') !== -1) { %>
+                                    <div class="col-lg-3 col-xs-6">
+                                        <div class="small-box bg-yellow" style="cursor:pointer;" onclick="window.location.href='/eims/org-mapping'">
+                                            <div class="inner">
+                                                <h3>OM</h3>
+                                                <p>Organization Mapping<br/>Module</p>
+                                            </div>
+                                            <div class="icon">
+                                                <i class="fa fa-sitemap"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% } %>
+                                <% if(module_names.indexOf('Compensation & Benefits Module') !== -1 && module_codes.indexOf('CBM') !== -1) { %>
+                                    <div class="col-lg-3 col-xs-6">
+                                        <div class="small-box bg-fuchsia" style="cursor:pointer;" onclick="window.location.href='/eims/compensation-benefits'">
+                                            <div class="inner">
+                                                <h3>CBM</h3>
+                                                <p>Compensation & Benefits<br/>Module</p>
+                                            </div>
+                                            <div class="icon">
+                                                <i class="fa fa-thumbs-up"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% } %>
+                                <% if(module_names.indexOf('Performance & Evaluation Module') !== -1 && module_codes.indexOf('PEM') !== -1) { %>
+                                    <div class="col-lg-3 col-xs-6">
+                                        <div class="small-box bg-orange" style="cursor:pointer;" onclick="window.location.href='/eims/performance-evaluation'">
+                                            <div class="inner">
+                                                <h3>PEM</h3>
+                                                <p>Performance & Evaluation<br/>Module</p>
+                                            </div>
+                                            <div class="icon">
+                                                <i class="fa fa-comments-o"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% } %>
+                            </div>
+                        <% } else { %>
+                            <div class="row">
+                                <div class="col-lg-3 col-xs-6">
+                                    <div class="small-box bg-aqua" style="cursor:pointer;" onclick="window.location.href='/eims/employee-information'">
+                                        <div class="inner">
+                                            <h3>EIM</h3>
+                                            <p>Employee Information<br/>Module</p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="fa fa-user-circle-o"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-xs-6">
+                                    <div class="small-box bg-green" style="cursor:pointer;" onclick="window.location.href='/eims/timekeeping'">
+                                        <div class="inner">
+                                            <h3>TM</h3>
+                                            <p>Timekeeping<br/>Module</p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="fa fa-clock-o"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-xs-6">
+                                    <div class="small-box bg-purple" style="cursor:pointer;" onclick="window.location.href='/eims/recruitment'">
+                                        <div class="inner">
+                                            <h3>RM</h3>
+                                            <p>Recruitment<br/>Module</p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="fa fa-users"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- <div class="col-lg-3 col-xs-6">
+                                    <div class="small-box bg-yellow" style="cursor:pointer;" onclick="window.location.href='/eims/org-mapping'">
+                                        <div class="inner">
+                                            <h3>OM</h3>
+                                            <p>Organization Mapping<br/>Module</p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="fa fa-sitemap"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-xs-6" style="margin-left:25%;">
+                                    <div class="small-box bg-fuchsia" style="cursor:pointer;" onclick="window.location.href='/eims/compensation-benefits'">
+                                        <div class="inner">
+                                            <h3>CBM</h3>
+                                            <p>Compensation & Benefits<br/>Module</p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="fa fa-thumbs-up"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-xs-6">
+                                    <div class="small-box bg-orange" style="cursor:pointer;" onclick="window.location.href='/eims/performance-evaluation'">
+                                        <div class="inner">
+                                            <h3>PEM</h3>
+                                            <p>Performance & Evaluation<br/>Module</p>
+                                        </div>
+                                        <div class="icon">
+                                            <i class="fa fa-comments-o"></i>
+                                        </div>
+                                    </div>
+                                </div> -->
+                            </div>
+                        <% } %>
+                    </section>
+                </div>
+            </div>
+            <footer class="main-footer">
+                <div>
+                    <div class="pull-right hidden-xs">
+                        <b>Version</b> 1.0.0
+                    </div>
+                    <strong>Copyright &copy; 2017 <a href="http://www.questronix.com.ph" target="_blank">Questronix Corporation</a>.</strong> All rights reserved.
+                </div>
+            </footer>
+        </div>
+        <%- include('../default/footer.html'); %>
+    </body>
+</html>

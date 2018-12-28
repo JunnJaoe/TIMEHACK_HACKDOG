@@ -1,0 +1,107 @@
+<!-- Approve Modal -->
+<div id="approve-modal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <form id="submit-approve-form" method="POST" action="/eims/timekeeping/approve-form">
+                <div class="modal-header bg-green">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Confirmation</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="approve-form" name="approve-form" value=""/>
+                    <input type="hidden" id="approve-id" name="approve-id" value=""/>
+                    <p class="text-center">
+                        Are you sure you want to approve this form?<br/><br/>
+                        <b class="text-green">Note:</b> You can't undo this action.
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Yes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Disapprove Modal -->
+<div id="disapprove-modal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <form id="submit-disapprove-form" method="POST" action="/eims/timekeeping/disapprove-form">
+                <div class="modal-header bg-red">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">Confirmation</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="disapprove-form" name="disapprove-form" value=""/>
+                    <input type="hidden" id="disapprove-id" name="disapprove-id" value=""/>
+                    <p class="text-center">
+                        Are you sure you want to disapprove this form?<br/><br/>
+                        <b class="text-red">Note:</b> You can't undo this action!
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger">Yes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Comments Modal -->
+<div id="comments-modal" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Comments</h4>
+            </div>
+            <div class="modal-body direct-chat-primary">
+                <!-- Conversations are loaded here -->
+                <div class="direct-chat-messages modal-comments" style="height:500px; overflow-x:auto;">
+                    <script>
+                        function comment(commenter_id, commenter, timestamp, comment) {
+                            var self_comment = false;
+                            if(commenter_id == '<%- user.employee_id %>') {
+                                self_comment = true;
+                            }
+
+                            $('.modal-comments').append(`
+                                <div class="direct-chat-msg${ self_comment ? ' right' : '' }">
+                                    <div class="direct-chat-info clearfix">
+                                        <span class="direct-chat-name${ self_comment ? ' pull-right' : ' pull-left' }">${commenter}</span>
+                                        <span class="direct-chat-timestamp ${ self_comment ? ' pull-left' : 'pull-right' }">${moment(timestamp).format('D MMM YYYY h:mm a')}</span>
+                                    </div>
+                                    <img class="direct-chat-img" src="/images/user_icon.png" alt="Message User Image">
+                                    <div class="direct-chat-text">
+                                        ${comment}
+                                    </div>
+                                </div>
+                            `);
+                            $('.modal-comments').scrollTop($('.modal-comments').prop("scrollHeight"));
+                        }
+                    </script>
+                </div>
+            </div>
+            <div class="modal-footer modal-comment-box">
+                <div class="input-group">
+                    <input type="text" id="message" name="message" sender-id="<%- user.employee_id %>" sender-name="<%= user.first_name %> <%= user.last_name %>" placeholder="Type Message ..." class="form-control"/>
+                    <span class="input-group-btn">
+                        <button type="button" id="add-comment" class="btn btn-primary btn-flat">Send</button>
+                    </span>
+                </div>
+                <div class="col-md-12 text-center" id="send-error-message" style="display:none; font-size:12px; color:red;">
+                    Error
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

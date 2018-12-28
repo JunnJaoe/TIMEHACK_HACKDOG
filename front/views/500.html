@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8"> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title><%= page.title %></title>
+        <%- include('./default/header.html'); %>
+    </head>
+    <body class="hold-transition skin-blue layout-top-nav">
+        <div class="wrapper">
+            <% if(user) { %>
+                <header class="main-header">
+                    <nav class="navbar navbar-static-top">
+                        <div class="container">
+                            <div class="navbar-header">
+                                <% if(user.access_type == 'admin') { %>
+                                    <a href="/" class="navbar-brand"><b>Q</b>BOS <b>|</b> <span style="font-size:15px;">Administrator Mode</span></a>
+                                <% } else { %>
+                                    <a href="/" class="navbar-brand"><b>Q</b>BOS</a>
+                                <% } %>
+                                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+                                    <i class="fa fa-bars"></i>
+                                </button>
+                            </div>
+            
+                            <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+                                <ul class="nav navbar-nav">
+                                    <li><a href="/dashboard">Dashboard</a></li>
+                                    <li><a href="/eims">EIMS</a></li>
+                                </ul>
+                            </div>
+                            <div class="navbar-custom-menu">
+                                <ul class="nav navbar-nav">
+                                    <li class="dropdown user user-menu">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                            <img src="/images/user_icon.png" class="user-image" alt="User Image">
+                                            <span class="hidden-xs"><%= user.first_name %> <%= user.last_name %>&nbsp;&nbsp;&nbsp;<i class="fa fa-caret-down" aria-hidden="true"></i></span>
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li class="user-header" style="height:auto;">
+                                                <img src="/images/user_icon.png" class="img-circle" alt="User Image">
+                                                <p>
+                                                    <%= user.first_name %> <%= user.last_name %>
+                                                    <small style="font-size:14px; font-style:italic;"><%= user.position %></small>
+                                                    <small>Employee since <%= moment(user.start_date).format('MMMM YYYY') %></small>
+                                                </p>
+                                            </li>
+                                            <li class="user-footer">
+                                                <% if(user.admin_access != null) { %>
+                                                    <div class="pull-left">
+                                                        <a href="/changerole/<%= user.access_type == 'admin' ? 'employee' : 'admin' %>" class="btn btn-info btn-flat"><%= user.access_type == 'admin' ? 'Employee' : 'Administrator' %> Mode</a>
+                                                    </div>
+                                                <% } %>        
+                                                <div class="pull-right">
+                                                    <a href="/logout" class="btn btn-default btn-flat">Logout</a>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </nav>
+                </header>
+            <% } %>
+
+            <div class="content-wrapper">
+                <section class="content">
+                    <div class="error-page">
+                        <h2 class="headline text-red"> 500</h2>
+                        <div class="error-content">
+                            <h3><i class="fa fa-warning text-red"></i> Oops! Something went wrong.</h3>
+                            <p>
+                                We will work on fixing that right away.<br/>
+                                Meanwhile, you may <a href="/">return to home.</a><br/><br/>
+                                If you think this is wrong, please contact the administrator at <a href="mailto:qbosadmin@questronix.com.ph">qbosadmin@questronix.com.ph</a>.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            
+            <footer class="main-footer">
+                <div class="container">
+                    <div class="pull-right hidden-xs">
+                        <b>Version</b> 1.0.0
+                    </div>
+                    <strong>Copyright &copy; 2017 <a href="http://www.questronix.com.ph" target="_blank">Questronix Corporation</a>.</strong> All rights reserved.
+                </div>
+            </footer>
+        </div>
+        <%- include('./default/footer.html'); %>
+    </body>
+</html>

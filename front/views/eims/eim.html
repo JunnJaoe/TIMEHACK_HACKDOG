@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8"> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title><%= page.title %></title>
+        <%- include('../default/header.html'); %>
+    </head>
+    <body class="hold-transition skin-blue sidebar-mini">
+        <div class="wrapper">
+            <%- include('./default/navbar.html'); %>
+            <%- include('./default/sidebar.html'); %>
+                
+            <div class="content-wrapper">
+                <div>
+                    <section class="content-header">
+                        <h1>
+                            Employee Information Module
+                            <small>Here you will see your company information</small>
+                        </h1>
+                    </section>
+        
+                    <section class="content">
+                        <% if(user.access_type == 'admin') { %>
+                        <% } else { %>
+                        <% } %>
+                    </section>
+                </div>
+            </div>
+            <footer class="main-footer">
+                <div>
+                    <div class="pull-right hidden-xs">
+                        <b>Version</b> 1.0.0
+                    </div>
+                    <strong>Copyright &copy; 2017 <a href="http://www.questronix.com.ph" target="_blank">Questronix Corporation</a>.</strong> All rights reserved.
+                </div>
+            </footer>
+        </div>
+        <%- include('../default/footer.html'); %>
+    </body>
+</html>
