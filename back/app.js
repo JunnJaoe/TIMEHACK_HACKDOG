@@ -8,6 +8,7 @@ var TimeHackMySQL = require('./services/TimeHackMySQL');
 var express_configuration = require("./express-configuration");
 express_configuration.init(app, express);
 
+app.use('/v1/', require('./routes/login'));
 app.use('/v1/employees', require('./routes/employee'));
 app.use('/v1/forms', require('./routes/form'));
 
