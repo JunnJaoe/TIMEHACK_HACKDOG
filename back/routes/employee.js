@@ -5,58 +5,57 @@ const Logger     = require('../services/Logger');
 const router     = express.Router();
 
 const EmployeeController = require('./controller/EmployeeController');
+const FormController = require('./controller/FormController');
 
-router.post('/login', function(req, res, next) {
-	var ACTION = '[login]';
+router.get('/form', function(req, res, next) {
+	var ACTION = '[view]';
 	Logger.log('debug', TAG + ACTION + ' request body', req.body);
 
-	var _employee = new EmployeeController(req);
+	var _form = new FormController(req);
 	async.auto({
-		employeeLogin:		_employee.employeeLogin.bind(_employee),
+		viewForms:		_form.viewForms.bind(_form),
 	}, function(err, result) {
 		if (err) return res.error(err);
-		else return res.ok(result.employeeLogin);          
-	});	
+		else return res.ok(result.viewForms);
+	});
 });
 
-router.post('/', function(req, res, next) {
+router.post('/form/add', function(req, res, next) {
 	var ACTION = '[add]';
 	Logger.log('debug', TAG + ACTION + ' request body', req.body);
 
-	var _employee = new EmployeeController(req);
+	var _form = new FormController(req);
 	async.auto({
-		addEmployee:		_employee.addEmployee.bind(_employee),
+		addForm:		_form.addForm.bind(_form),
 	}, function(err, result) {
 		if (err) return res.error(err);
-		else return res.ok(result.addEmployee);          
+		else return res.ok(result.addForm);
 	});
 });
 
-router.get('/:employee_id/approver', function(req, res, next) {
-	var ACTION = '[getEmployeeApprover]';
-	Logger.log('debug', TAG + ACTION + ' request query', req.query);
+router.post('/form/delete', function(req, res, next) {
+	var ACTION = '[delete]';
+	Logger.log('debug', TAG + ACTION + ' request body', req.body);
 
-	var _employee = new EmployeeController(req);
+	var _form = new FormController(req);
 	async.auto({
-		getApprover:		_employee.getApprover.bind(_employee),
+		deleteForm:		_form.deleteForm.bind(_form),
 	}, function(err, result) {
 		if (err) return res.error(err);
-		else return res.ok(result.getApprover);          
+		else return res.ok(result.deleteForm);
 	});
 });
 
-router.post('/:employee_id/approver', function(req, res, next) {
-	var ACTION = '[getEmployeeApprover]';
-	Logger.log('debug', TAG + ACTION + ' request query', req.query);
+router.post('/form/cancel', function(req, res, next) {
+	var ACTION = '[cancel]';
+	Logger.log('debug', TAG + ACTION + ' request body', req.body);
 
-	var _employee = new EmployeeController(req);
+	var _form = new FormController(req);
 	async.auto({
-		getApprover:			_employee.getApprover.bind(_employee),
-		checkApproverId:	['getApprover', _employee.checkApproverId.bind(_employee)],
-		addApprover:			['checkApproverId', _employee.addApprover.bind(_employee)],
+		cancelForm:		_form.cancelForm.bind(_form),
 	}, function(err, result) {
 		if (err) return res.error(err);
-		else return res.ok(result.addApprover);          
+		else return res.ok(result.cancelForm);
 	});
 });
 

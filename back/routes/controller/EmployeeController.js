@@ -12,37 +12,9 @@ function EmployeeController(req, res) {
 	this.res = res;
 };
 
-EmployeeController.prototype.employeeLogin = function(cb, result) {
-	let ACTION = '[employeeLogin]';
-
-	let query = `SELECT * FROM employee WHERE emailAddress = ?`;
-	let getEmployee = TimeHackMySQL.execute(query, [this.req.body.username]);
-	getEmployee.then((employees)=>{
-		if(employees.length != 0) {
-			let employee = employees[0];
-			let encryptedPassword = crypto.createHmac('sha256', process.env.HMAC_KEY).update(this.req.body.password).digest('hex');
-			if(encryptedPassword === employee.password) {
-				employee.password = '[HIDDEN]';
-				return cb(null, {
-          message: "Successfully validated.",
-					employee: employee
-				});
-			} else {
-				return cb(Errors.raise('UNAUTHORIZED_ACCESS'));
-			}
-		} else {
-			return cb(Errors.raise('UNAUTHORIZED_ACCESS'));
-		}
-	}).catch((error)=>{
-		Logger.log('error', TAG + ACTION, error);
-		console.log(error);
-		return cb(Errors.raise('INTERNAL_SERVER_ERROR', error));  
-	});
-};
-
 EmployeeController.prototype.addEmployee = function(cb, result) {
 	let ACTION = '[addEmployee]';
-  
+
   let body = this.req.body;
   let encryptedPassword = crypto.createHmac('sha256', process.env.HMAC_KEY).update(body.password).digest('hex');
 
@@ -64,11 +36,11 @@ EmployeeController.prototype.addEmployee = function(cb, result) {
 		return cb(null, {
       message: 'Successfully added employee.',
       data: data
-		});	
+		});
 	}).catch((error)=>{
 		Logger.log('error', TAG + ACTION, error);
     console.log(error);
-		return cb(Errors.raise('INTERNAL_SERVER_ERROR', error));  
+		return cb(Errors.raise('INTERNAL_SERVER_ERROR', error));
   });
 };
 
@@ -99,7 +71,7 @@ EmployeeController.prototype.getApprover = function(cb, result) {
 	}).catch((error)=>{
 		Logger.log('error', TAG + ACTION, error);
 		console.log(error);
-		return cb(Errors.raise('INTERNAL_SERVER_ERROR', error));  
+		return cb(Errors.raise('INTERNAL_SERVER_ERROR', error));
 	});
 };
 
@@ -117,13 +89,13 @@ EmployeeController.prototype.checkApproverId = function(cb, result) {
           let error = Errors.raise('NOT_FOUND');
           delete error.error.params;
           error.error.message = 'Approver ID not found.';
-          return cb(error);    
+          return cb(error);
         }
       } else {
         let error = Errors.raise('MISSING_INVALID_PARAMS');
         delete error.error.params;
         error.error.message = 'Employee ID cannot be the same with Approver ID.';
-        return cb(error);  
+        return cb(error);
       }
     } else {
       let error = Errors.raise('MISSING_INVALID_PARAMS');
@@ -134,8 +106,8 @@ EmployeeController.prototype.checkApproverId = function(cb, result) {
   }).catch((error)=>{
     Logger.log('error', TAG + ACTION, error);
     console.log(error);
-    return cb(Errors.raise('INTERNAL_SERVER_ERROR', error));  
-  });  
+    return cb(Errors.raise('INTERNAL_SERVER_ERROR', error));
+  });
 };
 
 EmployeeController.prototype.addApprover = function(cb, result) {
@@ -151,11 +123,11 @@ EmployeeController.prototype.addApprover = function(cb, result) {
 	addApprover.then((approver)=>{
 		return cb(null, {
       message: 'Successfully added employee approver.'
-		});	
+		});
 	}).catch((error)=>{
 		Logger.log('error', TAG + ACTION, error);
 		console.log(error);
-		return cb(Errors.raise('INTERNAL_SERVER_ERROR', error));  
+		return cb(Errors.raise('INTERNAL_SERVER_ERROR', error));
 	});
 };
 
